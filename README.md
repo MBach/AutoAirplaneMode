@@ -7,6 +7,10 @@ This App for Android 6.0 Marshmallow and later does one thing: it schedules Auto
 1. A smartphone at least on Android 6.0
 2. And with root capabilities
 
+## Download
+
+[v1.0](https://github.com/MBach/AutoAirplaneMode/blob/gh-pages/release/AutoAirplaneMode-1.0.apk)
+
 ## Screenshots
 ![Icon](https://raw.githubusercontent.com/MBach/AutoAirplaneMode/gh-pages/screenshots/en/icon.png)
 
@@ -15,8 +19,6 @@ This App for Android 6.0 Marshmallow and later does one thing: it schedules Auto
 ![Settings](https://raw.githubusercontent.com/MBach/AutoAirplaneMode/gh-pages/screenshots/en/settings.png)
 
 ![Notification](https://raw.githubusercontent.com/MBach/AutoAirplaneMode/gh-pages/screenshots/en/notification.png)
-
-## Download
 
 ## Support or Contact
 

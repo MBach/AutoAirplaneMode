@@ -23,3 +23,7 @@ This App for Android 6.0 Marshmallow and later does one thing: it schedules Auto
 ## Support or Contact
 
 You would like to translate this App in your language, or submit a bug / feature request? Please contribute!
+
+### You can contribute also by these means:
+
+bitcoin:39RBokXr4V9FPpuF7v1bM6PYcbgRRApp9W

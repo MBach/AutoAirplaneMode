@@ -27,12 +27,20 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
 {
     private static final String TAG = "AlarmBroadcastReceiver";
 
+    /** The most important object in this class. */
     private AlarmManager alarmManager;
+
+    /** Attach an intent to the manager with specific ID. */
     private PendingIntent enableAirplaneModePendingIntent;
+
+    /** Attach another intent to the manager with specific ID. */
     private PendingIntent disableAirplaneModePendingIntent;
 
-    private final SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM", Locale.getDefault());
-    private final SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    /** Display days/month. */
+    private static final SimpleDateFormat SDF_1 = new SimpleDateFormat("dd/MM", Locale.getDefault());
+
+    /** Display hours/minutes. */
+    private static final SimpleDateFormat SDF_2 = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -54,6 +62,7 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
     }
 
     /**
+     * Set both start / stop alarms.
      *
      * @param context the context
      * @return true if alarm was set
@@ -82,6 +91,8 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
 
         calendarEnd.set(Calendar.HOUR_OF_DAY, Integer.valueOf(disable[0]));
         calendarEnd.set(Calendar.MINUTE, Integer.valueOf(disable[1]));
+        calendarEnd.set(Calendar.SECOND, 0);
+        calendarEnd.set(Calendar.MILLISECOND, 0);
 
         // If settings are like this [23:00 -> 08:00], convert to [23:00 -> (day +1) 08:00]
         if (calendarStart.after(calendarEnd)) {
@@ -113,8 +124,8 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
             message = context.getString(R.string.toast_next_airplane_mode_tomorrow);
         } else {
             message = String.format(context.getString(R.string.toast_next_airplane_mode_later),
-                    sdf1.format(calendarStart.getTime()),
-                    sdf2.format(calendarStart.getTime()));
+                    SDF_1.format(calendarStart.getTime()),
+                    SDF_2.format(calendarStart.getTime()));
         }
         return message;
     }
@@ -177,6 +188,7 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
     }
 
     /**
+     * Removes any registered alarms.
      *
      * @param context the context
      */

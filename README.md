@@ -9,7 +9,10 @@ This App for Android 6.0 Marshmallow and later does one thing: it schedules Auto
 
 ## Download
 
-[v1.0](https://github.com/MBach/AutoAirplaneMode/blob/gh-pages/release/AutoAirplaneMode-1.0.apk)
+<a href="https://f-droid.org/repository/browse/?fdid=org.miamplayer.autoairplanemode" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
+
+You can also get the app directly on github, here is the [v1.0](https://github.com/MBach/AutoAirplaneMode/blob/gh-pages/release/AutoAirplaneMode-1.0.apk)
 
 ## Screenshots
 ![Icon](https://raw.githubusercontent.com/MBach/AutoAirplaneMode/gh-pages/screenshots/en/icon.png)

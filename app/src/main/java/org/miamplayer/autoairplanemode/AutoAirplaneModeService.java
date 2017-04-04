@@ -18,7 +18,7 @@ import java.io.IOException;
  *
  * @author Matthieu BACHELIER
  * @since 2017.02
- * @version 1.0
+ * @version 1.2
  */
 public class AutoAirplaneModeService extends IntentService
 {

@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -28,7 +27,7 @@ import java.util.Locale;
  *
  * @author Matthieu BACHELIER
  * @since 2017.02
- * @version 1.0
+ * @version 1.2
  */
 public class MainActivity extends Activity
 {
@@ -68,7 +67,37 @@ public class MainActivity extends Activity
         }
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        Switch switchApp = (Switch) findViewById(R.id.switchApp);
+        Switch switchEnableAirplane = (Switch) findViewById(R.id.switchEnableAirplane);
+        switchEnableAirplane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
+                TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
+                editEnableAirplane.setEnabled(isChecked);
+
+                SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = s.edit();
+                editor.putBoolean(Constants.AUTOMATIC_ENABLE, isChecked);
+                editor.apply();
+            }
+        });
+
+        Switch switchDisableAirplane = (Switch) findViewById(R.id.switchDisableAirplane);
+        switchDisableAirplane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                 //airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
+                 TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
+                 editDisableAirplane.setEnabled(isChecked);
+
+                 SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                 SharedPreferences.Editor editor = s.edit();
+                 editor.putBoolean(Constants.AUTOMATIC_DISABLE, isChecked);
+                 editor.apply();
+             }
+        });
+
+        /*Switch switchApp = (Switch) findViewById(R.id.switchApp);
         switchApp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -81,13 +110,13 @@ public class MainActivity extends Activity
                     }
                 }
 
-                TextView disableAirplaneText = (TextView) findViewById(R.id.disableAirplaneText);
+                Switch switchDisableAirplane = (Switch) findViewById(R.id.switchDisableAirplane);
                 TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
-                TextView enableAirplaneText = (TextView) findViewById(R.id.enableAirplaneText);
+                Switch switchEnableAirplane = (Switch) findViewById(R.id.switchEnableAirplane);
                 TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
                 TextView nextDay = (TextView) findViewById(R.id.nextDay);
 
-                for (TextView t : Arrays.asList(disableAirplaneText, editDisableAirplane, enableAirplaneText, editEnableAirplane, nextDay)) {
+                for (TextView t : Arrays.asList(switchDisableAirplane, editDisableAirplane, switchEnableAirplane, editEnableAirplane, nextDay)) {
                     t.setEnabled(isChecked);
                 }
 
@@ -96,7 +125,7 @@ public class MainActivity extends Activity
                 editor.putBoolean(Constants.APP_IS_ENABLED, isChecked);
                 editor.apply();
             }
-        });
+        });*/
 
         final TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
         editEnableAirplane.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +174,8 @@ public class MainActivity extends Activity
         updateNextDay();
 
         // Restore settings
-        switchApp.setChecked(settings.getBoolean(Constants.APP_IS_ENABLED, false));
+        switchEnableAirplane.setChecked(settings.getBoolean(Constants.AUTOMATIC_ENABLE, false));
+        switchDisableAirplane.setChecked(settings.getBoolean(Constants.AUTOMATIC_DISABLE, false));
     }
 
     private void displayToast(String message) {

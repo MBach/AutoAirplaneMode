@@ -13,7 +13,7 @@ import android.view.MenuItem;
  *
  * @author Matthieu BACHELIER
  * @since 2017.02
- * @version 1.0
+ * @version 1.2
  */
 public class SettingsActivity extends Activity
 {
@@ -47,7 +47,7 @@ public class SettingsActivity extends Activity
      *
      * @author Matthieu BACHELIER
      * @since 2017.02
-     * @version 1.0
+     * @version 1.2
      */
     public static class SettingsFragment extends PreferenceFragment
     {

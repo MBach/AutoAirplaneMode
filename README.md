@@ -18,7 +18,7 @@ This App for Android 6.0 Marshmallow and later does one thing: it schedules Auto
 
 ## Download
 
-[v1.0](https://github.com/MBach/AutoAirplaneMode/releases/download/v1.0/AutoAirplaneMode-1.0.apk)
+[v1.1](https://github.com/MBach/AutoAirplaneMode/releases/download/v1.1/AutoAirplaneMode-1.1.apk)
 
 ## Support or Contact
 

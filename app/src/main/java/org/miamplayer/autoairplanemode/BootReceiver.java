@@ -18,7 +18,12 @@ public class BootReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent != null && "android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
-            alarmBroadcastReceiver.setAlarms(context);
+            int id = intent.getIntExtra(Constants.ID, 0);
+            if (id == Constants.ID_DISABLE) {
+                alarmBroadcastReceiver.setAlarmDisableAirplaneMode(context);
+            } else if (id == Constants.ID_ENABLE) {
+                alarmBroadcastReceiver.setAlarmEnableAirplaneMode(context);
+            }
         }
     }
 }

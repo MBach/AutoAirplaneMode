@@ -46,7 +46,11 @@ public class AutoAirplaneModeService extends IntentService
             notificationManager.cancel(0);
             Log.d(TAG, "airplane mode is going off -> scheduling new alarm!");
             AlarmBroadcastReceiver r = new AlarmBroadcastReceiver();
-            r.setAlarms(getApplicationContext());
+            if (id == Constants.ID_DISABLE) {
+                r.setAlarmDisableAirplaneMode(getApplicationContext());
+            } else if (id == Constants.ID_ENABLE) {
+                r.setAlarmEnableAirplaneMode(getApplicationContext());
+            }
         }
         AlarmBroadcastReceiver.completeWakefulIntent(intent);
     }

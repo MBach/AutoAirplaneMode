@@ -1,0 +1,51 @@
+<resources>
+
+    <!-- Root Dialog -->
+    <string name="root_dialog_title">Root アクセスが必要です</string>
+    <string name="root_dialog_desc_main">機内モードを使用するために、お使いの電話を root 化する必要があります。</string>
+    <string name="root_dialog_desc_exit">このアプリを閉じます。</string>
+    <string name="root_dialog_ok_button">了解</string>
+
+    <!-- Main Page UI -->
+    <string name="app_name">自動機内モード</string>
+    <string name="toggle_app">アプリの切り替え</string>
+    <string name="airplane_mode_starts">機内モードの開始</string>
+    <string name="airplane_mode_ends">機内モードの終了</string>
+    <string name="monday">月曜日</string>
+    <string name="tuesday">火曜日</string>
+    <string name="wednesday">水曜日</string>
+    <string name="thursday">木曜日</string>
+    <string name="friday">金曜日</string>
+    <string name="saturday">土曜日</string>
+    <string name="sunday">日曜日</string>
+    <string name="trigger_on">トリガーオン</string>
+    <string name="next_day">(翌日)</string>
+
+    <!-- Toast displayed when setting time -->
+    <string name="toast_next_airplane_mode_today">次の機内モードは今日の予定です</string>
+    <string name="toast_next_airplane_mode_tomorrow">次の機内モードは明日の予定です</string>
+    <string name="toast_next_airplane_mode_later">機内モードは %1$s の %2$s の予定です</string>
+
+    <!-- Toolbar -->
+    <string name="menu_settings">設定</string>
+    <string name="menu_about">アプリについて</string>
+
+    <!-- About Dialog -->
+    <string name="about_description_main">このアプリは、この電話を自動的に機内モードにしたい時間をスケジュールすることができます。</string>
+    <string name="about_description_sleep_well">ぐっすりお休みください!</string>
+    <string name="about_ok_button">素晴らしい!</string>
+
+    <!-- App Shortcut -->
+    <string name="shortcut_short_label">設定</string>
+    <string name="shortcut_long_label">設定を開く</string>
+    <string name="shortcut_disabled">設定を開くは無効です</string>
+
+    <!-- Settings Page UI -->
+    <string name="settings_notification_label">通知</string>
+    <string name="settings_notification_switch">機内モードになった時に表示</string>
+
+    <!-- Notification -->
+    <string name="notification_title">機内モードが自動的に有効になります</string>
+    <string name="notification_content">%s に無効になります</string>
+    <string name="title_activity_settings">設定</string>
+</resources>

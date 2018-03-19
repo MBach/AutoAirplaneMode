@@ -31,7 +31,6 @@ import java.util.Locale;
  */
 public class MainActivity extends Activity
 {
-
     private static final String TAG = "MainActivity";
 
     private final AlarmBroadcastReceiver airplaneBroadcastReceiver = new AlarmBroadcastReceiver();
@@ -67,13 +66,19 @@ public class MainActivity extends Activity
         }
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        Switch switchEnableAirplane = (Switch) findViewById(R.id.switchEnableAirplane);
+        Switch switchEnableAirplane = findViewById(R.id.switchEnableAirplane);
         switchEnableAirplane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
-                TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
+                airplaneBroadcastReceiver.cancelAlarm(MainActivity.this, Constants.ID_ENABLE);
+                TextView editEnableAirplane = findViewById(R.id.editEnableAirplane);
                 editEnableAirplane.setEnabled(isChecked);
+
+                if (isChecked) {
+                    airplaneBroadcastReceiver.setAlarmEnableAirplaneMode(MainActivity.this);
+                } else {
+                    displayToast("This device won't turn on Airplane Mode any more");
+                }
 
                 SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = s.edit();
@@ -82,13 +87,19 @@ public class MainActivity extends Activity
             }
         });
 
-        Switch switchDisableAirplane = (Switch) findViewById(R.id.switchDisableAirplane);
+        Switch switchDisableAirplane = findViewById(R.id.switchDisableAirplane);
         switchDisableAirplane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
              @Override
              public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                 //airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
-                 TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
+                 airplaneBroadcastReceiver.cancelAlarm(MainActivity.this, Constants.ID_DISABLE);
+                 TextView editDisableAirplane = findViewById(R.id.editDisableAirplane);
                  editDisableAirplane.setEnabled(isChecked);
+
+                 if (isChecked) {
+                     airplaneBroadcastReceiver.setAlarmDisableAirplaneMode(MainActivity.this);
+                 } else {
+                     displayToast("This device won't turn off Airplane Mode any more");
+                 }
 
                  SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                  SharedPreferences.Editor editor = s.edit();
@@ -97,37 +108,7 @@ public class MainActivity extends Activity
              }
         });
 
-        /*Switch switchApp = (Switch) findViewById(R.id.switchApp);
-        switchApp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
-                if (isChecked) {
-                    String message = airplaneBroadcastReceiver.setAlarms(MainActivity.this);
-                    if (!message.isEmpty()) {
-                        displayToast(message);
-                    }
-                }
-
-                Switch switchDisableAirplane = (Switch) findViewById(R.id.switchDisableAirplane);
-                TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
-                Switch switchEnableAirplane = (Switch) findViewById(R.id.switchEnableAirplane);
-                TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
-                TextView nextDay = (TextView) findViewById(R.id.nextDay);
-
-                for (TextView t : Arrays.asList(switchDisableAirplane, editDisableAirplane, switchEnableAirplane, editEnableAirplane, nextDay)) {
-                    t.setEnabled(isChecked);
-                }
-
-                SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = s.edit();
-                editor.putBoolean(Constants.APP_IS_ENABLED, isChecked);
-                editor.apply();
-            }
-        });*/
-
-        final TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
+        final TextView editEnableAirplane = findViewById(R.id.editEnableAirplane);
         editEnableAirplane.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,19 +117,16 @@ public class MainActivity extends Activity
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         editEnableAirplane.setText(String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute));
-                        updateNextDay();
+                        //updateNextDay();
                         saveClocks();
-                        airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
-                        String message = airplaneBroadcastReceiver.setAlarms(MainActivity.this);
-                        if (!message.isEmpty()) {
-                            displayToast(message);
-                        }
+                        airplaneBroadcastReceiver.cancelAlarm(MainActivity.this, Constants.ID_ENABLE);
+                        airplaneBroadcastReceiver.setAlarmEnableAirplaneMode(MainActivity.this);
                     }
                 }, 23, 0, true).show();
             }
         });
 
-        final TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
+        final TextView editDisableAirplane = findViewById(R.id.editDisableAirplane);
         editDisableAirplane.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,13 +135,10 @@ public class MainActivity extends Activity
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         editDisableAirplane.setText(String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute));
-                        updateNextDay();
+                        //updateNextDay();
                         saveClocks();
-                        airplaneBroadcastReceiver.cancelAlarms(MainActivity.this);
-                        String message = airplaneBroadcastReceiver.setAlarms(MainActivity.this);
-                        if (!message.isEmpty()) {
-                            displayToast(message);
-                        }
+                        airplaneBroadcastReceiver.cancelAlarm(MainActivity.this, Constants.ID_DISABLE);
+                        airplaneBroadcastReceiver.setAlarmDisableAirplaneMode(MainActivity.this);
                     }
                 }, 8, 0, true).show();
             }
@@ -171,7 +146,7 @@ public class MainActivity extends Activity
 
         editEnableAirplane.setText(settings.getString(Constants.ENABLE_AIRPLANE_TIME, "23:00"));
         editDisableAirplane.setText(settings.getString(Constants.DISABLE_AIRPLANE_TIME, "08:00"));
-        updateNextDay();
+        //updateNextDay();
 
         // Restore settings
         switchEnableAirplane.setChecked(settings.getBoolean(Constants.AUTOMATIC_ENABLE, false));
@@ -216,9 +191,9 @@ public class MainActivity extends Activity
      *
      */
     private void updateNextDay() {
-        final TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
-        final TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
-        final TextView nextDay = (TextView) findViewById(R.id.nextDay);
+        final TextView editEnableAirplane = findViewById(R.id.editEnableAirplane);
+        final TextView editDisableAirplane = findViewById(R.id.editDisableAirplane);
+        final TextView nextDay = findViewById(R.id.nextDay);
         String enable = editEnableAirplane.getText().toString();
         String disable = editDisableAirplane.getText().toString();
         String[] e = enable.split(":");
@@ -240,8 +215,8 @@ public class MainActivity extends Activity
     private void saveClocks() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = settings.edit();
-        final TextView editEnableAirplane = (TextView) findViewById(R.id.editEnableAirplane);
-        final TextView editDisableAirplane = (TextView) findViewById(R.id.editDisableAirplane);
+        final TextView editEnableAirplane = findViewById(R.id.editEnableAirplane);
+        final TextView editDisableAirplane = findViewById(R.id.editDisableAirplane);
         editor.putString(Constants.ENABLE_AIRPLANE_TIME, editEnableAirplane.getText().toString());
         editor.putString(Constants.DISABLE_AIRPLANE_TIME, editDisableAirplane.getText().toString());
         Log.d(TAG, "enable airplane mode at: " + editEnableAirplane.getText().toString());

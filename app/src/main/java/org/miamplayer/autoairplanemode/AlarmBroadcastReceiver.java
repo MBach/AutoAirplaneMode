@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -67,7 +66,7 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
      * @param context the context
      * @return true if alarm was set
      */
-    public String setAlarms(Context context)
+    /*public String setAlarm(Context context, int alarmType)
     {
         Log.d(TAG, "setAlarms");
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -128,6 +127,60 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
                     SDF_2.format(calendarStart.getTime()));
         }
         return message;
+    }*/
+
+    public void setAlarmDisableAirplaneMode(Context context)
+    {
+        Log.d(TAG, "setAlarmDisableAirplaneMode");
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String disableAutoAirplaneMode = settings.getString(Constants.DISABLE_AIRPLANE_TIME, "08:00");
+
+        String[] disable = disableAutoAirplaneMode.split(":");
+
+        Calendar now = Calendar.getInstance();
+        Calendar calendarEnd = Calendar.getInstance();
+        now.setTimeInMillis(System.currentTimeMillis());
+        calendarEnd.setTimeInMillis(now.getTimeInMillis());
+
+        calendarEnd.set(Calendar.HOUR_OF_DAY, Integer.valueOf(disable[0]));
+        calendarEnd.set(Calendar.MINUTE, Integer.valueOf(disable[1]));
+        calendarEnd.set(Calendar.SECOND, 0);
+        calendarEnd.set(Calendar.MILLISECOND, 0);
+
+        Intent intentDisable = new Intent(context, AlarmBroadcastReceiver.class);
+        intentDisable.putExtra(Constants.ID, Constants.ID_DISABLE);
+
+        disableAirplaneModePendingIntent = PendingIntent.getBroadcast(context, Constants.ID_DISABLE, intentDisable, 0);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendarEnd.getTimeInMillis(), disableAirplaneModePendingIntent);
+        setAlarmAfterReboot(context, true);
+    }
+
+    public void setAlarmEnableAirplaneMode(Context context)
+    {
+        Log.d(TAG, "setAlarmEnableAirplaneMode");
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String enableAutoAirplaneMode = settings.getString(Constants.ENABLE_AIRPLANE_TIME, "23:00");
+
+        String[] enable = enableAutoAirplaneMode.split(":");
+
+        Calendar now = Calendar.getInstance();
+        Calendar calendarStart = Calendar.getInstance();
+        now.setTimeInMillis(System.currentTimeMillis());
+        calendarStart.setTimeInMillis(now.getTimeInMillis());
+
+        calendarStart.set(Calendar.HOUR_OF_DAY, Integer.valueOf(enable[0]));
+        calendarStart.set(Calendar.MINUTE, Integer.valueOf(enable[1]));
+        calendarStart.set(Calendar.SECOND, 0);
+        calendarStart.set(Calendar.MILLISECOND, 0);
+
+        Intent intentEnable = new Intent(context, AlarmBroadcastReceiver.class);
+        intentEnable.putExtra(Constants.ID, Constants.ID_ENABLE);
+
+        enableAirplaneModePendingIntent = PendingIntent.getBroadcast(context, Constants.ID_ENABLE, intentEnable, 0);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendarStart.getTimeInMillis(), enableAirplaneModePendingIntent);
+        setAlarmAfterReboot(context, true);
     }
 
     /**
@@ -188,16 +241,20 @@ public class AlarmBroadcastReceiver extends WakefulBroadcastReceiver
     }
 
     /**
-     * Removes any registered alarms.
+     * Removes an alarm identified by its ID.
      *
      * @param context the context
+     * @param alarmType the alarmType
      */
-    public void cancelAlarms(Context context)
+    public void cancelAlarm(Context context, int alarmType)
     {
         Log.d(TAG, "cancelAlarms");
         if (alarmManager != null) {
-            alarmManager.cancel(enableAirplaneModePendingIntent);
-            alarmManager.cancel(disableAirplaneModePendingIntent);
+            if (alarmType == Constants.ID_ENABLE && enableAirplaneModePendingIntent != null) {
+                alarmManager.cancel(enableAirplaneModePendingIntent);
+            } else if (alarmType == Constants.ID_DISABLE && disableAirplaneModePendingIntent != null) {
+                alarmManager.cancel(disableAirplaneModePendingIntent);
+            }
         }
         setAlarmAfterReboot(context, false);
     }

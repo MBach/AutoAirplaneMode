@@ -43,10 +43,16 @@ public class AutoAirplaneModeService extends IntentService
         } else {
             // Auto close notification
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.cancel(0);
+            if (notificationManager != null) {
+                notificationManager.cancel(0);
+            }
             Log.d(TAG, "airplane mode is going off -> scheduling new alarm!");
             AlarmBroadcastReceiver r = new AlarmBroadcastReceiver();
-            r.setAlarms(getApplicationContext());
+            if (id == Constants.ID_DISABLE) {
+                r.setAlarmDisableAirplaneMode(getApplicationContext());
+            } else if (id == Constants.ID_ENABLE) {
+                r.setAlarmEnableAirplaneMode(getApplicationContext());
+            }
         }
         AlarmBroadcastReceiver.completeWakefulIntent(intent);
     }
@@ -68,7 +74,9 @@ public class AutoAirplaneModeService extends IntentService
         builder.setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
+        if (notificationManager != null) {
+            notificationManager.notify(0, builder.build());
+        }
     }
 
     /**
